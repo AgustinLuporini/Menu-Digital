@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabase";
 import MenuClient from "@/components/menu/MenuClient";
-import Footer from "@/components/ui/Footer";
 
 export const revalidate = 0;
 
@@ -17,12 +16,10 @@ export default async function MenuPage() {
     .order('sort_order', { ascending: true });
 
   return (
-    // 1. Quitamos 'flex justify-center'. Dejamos bloque normal.
     <div className="min-h-screen bg-[#050505]"> 
       
-      {/* 2. Agregamos 'mx-auto' para centrar el bloque. 
-             Cambiamos 'md:max-w-md' por 'md:w-[450px]' (ancho fijo) para eliminar cualquier duda de flexibilidad. */}
-      <main className="w-full md:w-[450px] mx-auto bg-[#101922] min-h-screen shadow-2xl relative md:border-x md:border-white/5 flex flex-col overflow-x-hidden">
+      {/* Main con flex-col para ocupar toda la altura */}
+      <main className="min-h-screen bg-[#050505] pb-20 md:pb-0 flex flex-col">
         
         <header className="sticky top-0 z-50 bg-[#101922]/95 backdrop-blur-md border-b border-white/5 shrink-0">
           <div className="flex items-center p-4 justify-center relative">
@@ -32,15 +29,15 @@ export default async function MenuPage() {
           </div>
         </header>
 
-        <div className="flex-1 w-full">
+        {/* --- CORRECCIÓN AQUÍ --- */}
+        {/* Agregamos 'flex flex-col' para que lo de adentro pueda usar flex-1 */}
+        <div className="flex-1 w-full flex flex-col">
           <MenuClient 
             products={products || []} 
             categories={categories || []} 
           />
         </div>
 
-
-        
       </main>
     </div>
   );

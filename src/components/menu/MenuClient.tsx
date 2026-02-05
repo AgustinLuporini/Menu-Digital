@@ -29,7 +29,7 @@ interface MenuClientProps {
 export default function MenuClient({ products, categories }: MenuClientProps) {
   // Estados de Datos
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null); // <--- NUEVO: Para el Modal de Producto
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   
   // Animaciones y Refs
   const [parent] = useAutoAnimate();
@@ -104,7 +104,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
       <nav 
         className={`flex overflow-x-auto hide-scrollbar px-6 gap-8 border-b border-white/5 
           sticky top-[61px] z-40 bg-[#101922]/95 backdrop-blur-md transition-transform duration-300 ease-in-out will-change-transform
-          justify-center md:justify-center  // <--- AQUÍ ESTÁ EL CAMBIO: Centrado
+          justify-center
           ${isVisible ? "translate-y-0" : "-translate-y-[200%] pointer-events-none"}
         `}
       >
@@ -140,7 +140,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
       </nav>
 
       {/* --- HEADER CATEGORÍA --- */}
-      <div className="px-6 pt-6 pb-2 text-center"> {/* Agregué text-center para centrar textos */}
+      <div className="px-6 pt-6 pb-2 text-center">
         <h2 className="text-xl font-bold text-white mb-0.5 animate-fade-in">
           {currentCategoryName}
         </h2>
@@ -149,13 +149,14 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         </p>
       </div>
 
-      {/* --- LISTA DE PRODUCTOS --- */}
-      <div className="divide-y divide-white/5 min-h-[300px]" ref={parent}>
+      {/* --- LISTA DE PRODUCTOS (FLEX-1 PARA EMPUJAR FOOTER) --- */}
+      {/* CAMBIO AQUÍ: Agregado 'flex-1 w-full' y quitado 'min-h-[300px]' */}
+      <div className="divide-y divide-white/5 flex-1 w-full" ref={parent}>
         {filteredProducts.map((product) => (
           <div 
             key={product.id} 
-            onClick={() => setSelectedProduct(product)} // <--- AL CLICK, ABRIMOS MODAL
-            className="px-6 py-4 hover:bg-white/5 transition-colors cursor-pointer group active:bg-white/10" // active:bg da feedback táctil
+            onClick={() => setSelectedProduct(product)}
+            className="px-6 py-4 hover:bg-white/5 transition-colors cursor-pointer group active:bg-white/10"
           >
             <div className="flex items-center gap-4">
               <div 
@@ -186,46 +187,37 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         )}
       </div>
 
-      {/* --- MODAL DE PRODUCTO (NUEVO) --- */}
+      {/* --- MODAL DE PRODUCTO --- */}
       {selectedProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in" onClick={() => setSelectedProduct(null)}>
             <div 
                 className="bg-[#1A1A1A] w-full max-w-sm rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden relative flex flex-col"
-                onClick={(e) => e.stopPropagation()} // Evita cerrar si clickean adentro
+                onClick={(e) => e.stopPropagation()}
             >
-                {/* Botón Cerrar */}
                 <button 
                     onClick={() => setSelectedProduct(null)}
                     className="absolute top-4 right-4 z-10 bg-black/50 text-white rounded-full p-2 backdrop-blur-md hover:bg-black/70 transition-all"
                 >
                     <span className="material-symbols-outlined text-xl">close</span>
                 </button>
-
-                {/* Foto Grande */}
                 <div 
                     className="w-full h-64 bg-cover bg-center relative"
                     style={{ backgroundImage: `url('${selectedProduct.image_url}')` }}
                 >
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] to-transparent"></div>
                 </div>
-
-                {/* Info Detallada */}
                 <div className="p-8 -mt-10 relative">
-                    {/* Badge Categoría */}
                     <div className="mb-4">
                         <span className="px-3 py-1 bg-primary/20 text-primary border border-primary/20 rounded-full text-[10px] font-bold uppercase tracking-widest">
                             {categories.find(c => c.id === selectedProduct.category_id)?.name}
                         </span>
                     </div>
-
                     <h3 className="text-2xl font-black text-white leading-tight mb-2">
                         {selectedProduct.name}
                     </h3>
-                    
                     <p className="text-slate-400 text-sm leading-relaxed mb-6">
                         {selectedProduct.description}
                     </p>
-
                     <div className="flex items-center justify-between pt-6 border-t border-white/10">
                         <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Precio</span>
                         <span className="text-3xl font-black text-accent tracking-tight">
@@ -241,33 +233,18 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
       {isWifiModalOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-fade-in">
             <div className="bg-[#1A1A1A] w-full max-w-sm rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden relative">
-                <button 
-                    onClick={() => setIsWifiModalOpen(false)}
-                    className="absolute top-4 right-4 text-slate-500 hover:text-white bg-white/5 rounded-full p-2 transition-colors"
-                >
-                    <span className="material-symbols-outlined text-sm">close</span>
-                </button>
-
+                <button onClick={() => setIsWifiModalOpen(false)} className="absolute top-4 right-4 text-slate-500 hover:text-white bg-white/5 rounded-full p-2 transition-colors"><span className="material-symbols-outlined text-sm">close</span></button>
                 <div className="p-8 text-center">
-                    <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(19,127,236,0.3)]">
-                        <span className="material-symbols-outlined text-3xl text-primary">wifi</span>
-                    </div>
+                    <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(19,127,236,0.3)]"><span className="material-symbols-outlined text-3xl text-primary">wifi</span></div>
                     <h3 className="text-xl font-black text-white mb-1">Conectate al WiFi</h3>
                     <p className="text-slate-400 text-xs mb-6">Copiá la clave y navegá gratis.</p>
-
                     <div className="space-y-3">
                         <div className="bg-black/30 rounded-xl p-3 border border-white/5 flex items-center justify-between">
-                            <div className="text-left">
-                                <p className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Red</p>
-                                <p className="text-white font-medium text-sm truncate max-w-[150px]">{wifiSettings.ssid}</p>
-                            </div>
+                            <div className="text-left"><p className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Red</p><p className="text-white font-medium text-sm truncate max-w-[150px]">{wifiSettings.ssid}</p></div>
                             <button onClick={() => copyToClipboard(wifiSettings.ssid, 'ssid')} className="p-2 bg-white/5 rounded-lg hover:bg-primary transition-colors group"><span className="material-symbols-outlined text-slate-400 group-hover:text-white text-lg">{copiedField === 'ssid' ? 'check' : 'content_copy'}</span></button>
                         </div>
                         <div className="bg-black/30 rounded-xl p-3 border border-white/5 flex items-center justify-between">
-                            <div className="text-left">
-                                <p className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Contraseña</p>
-                                <p className="text-white font-medium text-sm tracking-wider truncate max-w-[150px]">{wifiSettings.password}</p>
-                            </div>
+                            <div className="text-left"><p className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Contraseña</p><p className="text-white font-medium text-sm tracking-wider truncate max-w-[150px]">{wifiSettings.password}</p></div>
                             <button onClick={() => copyToClipboard(wifiSettings.password, 'pass')} className="p-2 bg-white/5 rounded-lg hover:bg-primary transition-colors group"><span className="material-symbols-outlined text-slate-400 group-hover:text-white text-lg">{copiedField === 'pass' ? 'check' : 'content_copy'}</span></button>
                         </div>
                     </div>

@@ -1,13 +1,19 @@
-export default function Footer() {
+import React from "react";
+
+type FooterProps = {
+  wifiSettings?: { ssid: string; password: string };
+  onOpenWifi: () => void;
+};
+
+export default function Footer({ wifiSettings, onOpenWifi }: FooterProps) {
+  
+  // Verificamos si hay red configurada para mostrar el botón
+  const hasWifi = wifiSettings && wifiSettings.ssid && wifiSettings.ssid.trim() !== "";
+
   return (
-    <footer className="mt-auto border-t border-white/5 bg-[#0a1016] pt-8 pb-10">
+    <footer className="mt-auto border-t border-white/5 bg-[#0a1016] pt-8 pb-10 w-full z-10 relative">
       <div className="px-6 flex flex-col items-center">
         
-        {/* BOTÓN WIFI */}
-        <button className="flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 text-xs font-medium text-slate-400 hover:text-white hover:bg-white/10 transition-all mb-8 border border-white/5 group">
-            <span className="material-symbols-outlined text-[18px] group-hover:text-accent transition-colors">wifi</span>
-            <span>Solicitar clave WiFi</span>
-        </button>
 
         {/* --- SECCIÓN RESTAURANTE --- */}
         <div className="flex flex-col items-center text-center w-full mb-8">
@@ -45,9 +51,8 @@ export default function Footer() {
         {/* Separador sutil */}
         <div className="h-px w-full max-w-[200px] bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8"></div>
 
-        {/* --- SECCIÓN DEVOYS (Branding Final) --- */}
+        {/* --- SECCIÓN DEVOYS --- */}
         <div className="flex flex-col items-center">
-          {/* Link principal a la web */}
           <a 
             href="https://www.devoys.com.ar/" 
             target="_blank" 
@@ -55,17 +60,13 @@ export default function Footer() {
             className="flex flex-col items-center group"
           >
             <span className="text-[9px] text-slate-500 mb-1 font-medium">Developed by</span>
-            
-            {/* TEXTO CON GRADIENTE VIOLETA/ROSA */}
-            {/* Usamos colores arbitrarios de Tailwind ([#hex]) para el gradiente */}
             <span className="text-[13px] font-black tracking-[0.15em] bg-gradient-to-r from-[#8b5cf6] to-[#ec4899] bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
               DEVOYS
             </span>
           </a>
 
-          {/* Bajada genérica (ya no es link) */}
           <p className="text-[8px] text-slate-600 mt-2 font-medium tracking-wide">
-             Soluciones digitales para tu negocio.
+              Soluciones digitales para tu negocio.
           </p>
         </div>
 

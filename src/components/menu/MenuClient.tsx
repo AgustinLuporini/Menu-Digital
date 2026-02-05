@@ -2,7 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { supabase } from "@/lib/supabase"; 
+import Footer from "../ui/Footer"; 
 
+// --- INTERFACES ---
 interface Product {
   id: string;
   name: string;
@@ -24,44 +27,55 @@ interface MenuClientProps {
 }
 
 export default function MenuClient({ products, categories }: MenuClientProps) {
+  // Estados de Datos
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null); // <--- NUEVO: Para el Modal de Producto
+  
+  // Animaciones y Refs
   const [parent] = useAutoAnimate();
-  
-  // ESTADO PARA VISIBILIDAD
-  const [isVisible, setIsVisible] = useState(true);
-  
-  // USAMOS REF PARA GUARDAR LA POSICIÓN (No provoca re-renders innecesarios)
   const lastScrollY = useRef(0);
+  const [isVisible, setIsVisible] = useState(true);
 
+  // Estados WiFi
+  const [wifiSettings, setWifiSettings] = useState({ ssid: '', password: '' });
+  const [isWifiModalOpen, setIsWifiModalOpen] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  // --- EFECTOS ---
   useEffect(() => {
+    // 1. Scroll
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastScrollY.current) < 10) return;
+
+      if (currentScrollY < 100) setIsVisible(true);
+      else if (currentScrollY > lastScrollY.current) setIsVisible(false);
+      else setIsVisible(true);
       
-      // Umbral de seguridad: no hacer nada si el scroll es muy cortito (evita rebotes)
-      if (Math.abs(currentScrollY - lastScrollY.current) < 10) {
-        return;
-      }
-
-      // Lógica:
-      // 1. Si estamos muy arriba (< 100px), mostrar siempre.
-      // 2. Si bajamos (current > last), ocultar.
-      // 3. Si subimos (current < last), mostrar.
-      if (currentScrollY < 100) {
-        setIsVisible(true);
-      } else if (currentScrollY > lastScrollY.current) {
-        setIsVisible(false); // Bajando -> Ocultar
-      } else {
-        setIsVisible(true);  // Subiendo -> Mostrar
-      }
-
-      // Guardamos la posición actual para la próxima comparación
       lastScrollY.current = currentScrollY;
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // El array vacío [] asegura que el evento se cree una sola vez.
 
+    // 2. WiFi
+    const fetchWifi = async () => {
+        const { data } = await supabase.from('restaurant_settings').select('wifi_ssid, wifi_password').single();
+        if (data && data.wifi_ssid) {
+            setWifiSettings({ ssid: data.wifi_ssid, password: data.wifi_password });
+        }
+    };
+    fetchWifi();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Helpers
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  // Filtrado
   const filteredProducts = selectedCategoryId 
     ? products.filter((p) => p.category_id === selectedCategoryId)
     : products;
@@ -71,17 +85,26 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
     ? `Nuestras opciones de ${currentCategoryName.toLowerCase()}.` 
     : "Seleccioná una categoría para comenzar.";
 
+  const hasWifi = wifiSettings.ssid && wifiSettings.ssid.trim() !== "";
+
   return (
     <>
-      {/* NAVBAR STICKY
-         - top-[61px]: Un pixel más que el header para que no se superpongan mal.
-         - transition-transform: Suaviza la entrada/salida.
-         - translate-y-0: Posición normal.
-         - -translate-y-[200%]: Se va para arriba (se esconde detrás del header).
-      */}
+      {/* --- BOTÓN WIFI FLOTANTE --- */}
+      {hasWifi && (
+        <button
+            onClick={() => setIsWifiModalOpen(true)}
+            className="fixed bottom-6 left-6 z-40 bg-[#1A1A1A]/90 backdrop-blur-md border border-white/10 text-white size-12 rounded-full flex items-center justify-center shadow-xl shadow-black/50 hover:bg-primary hover:border-primary transition-all animate-bounce-in"
+            style={{ animationDuration: '0.5s' }}
+        >
+            <span className="material-symbols-outlined text-[24px]">wifi</span>
+        </button>
+      )}
+
+      {/* --- NAVBAR STICKY (CENTRADO) --- */}
       <nav 
         className={`flex overflow-x-auto hide-scrollbar px-6 gap-8 border-b border-white/5 
           sticky top-[61px] z-40 bg-[#101922]/95 backdrop-blur-md transition-transform duration-300 ease-in-out will-change-transform
+          justify-center md:justify-center  // <--- AQUÍ ESTÁ EL CAMBIO: Centrado
           ${isVisible ? "translate-y-0" : "-translate-y-[200%] pointer-events-none"}
         `}
       >
@@ -116,8 +139,8 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         })}
       </nav>
 
-      {/* Espaciador */}
-      <div className="px-6 pt-6 pb-2">
+      {/* --- HEADER CATEGORÍA --- */}
+      <div className="px-6 pt-6 pb-2 text-center"> {/* Agregué text-center para centrar textos */}
         <h2 className="text-xl font-bold text-white mb-0.5 animate-fade-in">
           {currentCategoryName}
         </h2>
@@ -126,12 +149,17 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         </p>
       </div>
 
+      {/* --- LISTA DE PRODUCTOS --- */}
       <div className="divide-y divide-white/5 min-h-[300px]" ref={parent}>
         {filteredProducts.map((product) => (
-          <div key={product.id} className="px-6 py-4 hover:bg-white/5 transition-colors cursor-pointer group">
+          <div 
+            key={product.id} 
+            onClick={() => setSelectedProduct(product)} // <--- AL CLICK, ABRIMOS MODAL
+            className="px-6 py-4 hover:bg-white/5 transition-colors cursor-pointer group active:bg-white/10" // active:bg da feedback táctil
+          >
             <div className="flex items-center gap-4">
               <div 
-                className="w-16 h-16 bg-center bg-no-repeat bg-cover rounded-lg shrink-0 border border-white/10 group-hover:border-accent/50 transition-colors" 
+                className="w-16 h-16 bg-center bg-no-repeat bg-cover rounded-lg shrink-0 border border-white/10 group-hover:border-accent/50 transition-colors bg-slate-800" 
                 style={{ backgroundImage: `url("${product.image_url}")` }} 
               ></div>
               <div className="flex flex-1 flex-col justify-center min-w-0">
@@ -150,7 +178,107 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
             </div>
           </div>
         ))}
+        
+        {filteredProducts.length === 0 && (
+            <div className="py-12 text-center text-slate-500 text-sm">
+                No hay productos en esta categoría.
+            </div>
+        )}
       </div>
+
+      {/* --- MODAL DE PRODUCTO (NUEVO) --- */}
+      {selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in" onClick={() => setSelectedProduct(null)}>
+            <div 
+                className="bg-[#1A1A1A] w-full max-w-sm rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden relative flex flex-col"
+                onClick={(e) => e.stopPropagation()} // Evita cerrar si clickean adentro
+            >
+                {/* Botón Cerrar */}
+                <button 
+                    onClick={() => setSelectedProduct(null)}
+                    className="absolute top-4 right-4 z-10 bg-black/50 text-white rounded-full p-2 backdrop-blur-md hover:bg-black/70 transition-all"
+                >
+                    <span className="material-symbols-outlined text-xl">close</span>
+                </button>
+
+                {/* Foto Grande */}
+                <div 
+                    className="w-full h-64 bg-cover bg-center relative"
+                    style={{ backgroundImage: `url('${selectedProduct.image_url}')` }}
+                >
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] to-transparent"></div>
+                </div>
+
+                {/* Info Detallada */}
+                <div className="p-8 -mt-10 relative">
+                    {/* Badge Categoría */}
+                    <div className="mb-4">
+                        <span className="px-3 py-1 bg-primary/20 text-primary border border-primary/20 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                            {categories.find(c => c.id === selectedProduct.category_id)?.name}
+                        </span>
+                    </div>
+
+                    <h3 className="text-2xl font-black text-white leading-tight mb-2">
+                        {selectedProduct.name}
+                    </h3>
+                    
+                    <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                        {selectedProduct.description}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Precio</span>
+                        <span className="text-3xl font-black text-accent tracking-tight">
+                            ${selectedProduct.price.toLocaleString("es-AR")}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* --- MODAL WIFI --- */}
+      {isWifiModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-fade-in">
+            <div className="bg-[#1A1A1A] w-full max-w-sm rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden relative">
+                <button 
+                    onClick={() => setIsWifiModalOpen(false)}
+                    className="absolute top-4 right-4 text-slate-500 hover:text-white bg-white/5 rounded-full p-2 transition-colors"
+                >
+                    <span className="material-symbols-outlined text-sm">close</span>
+                </button>
+
+                <div className="p-8 text-center">
+                    <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(19,127,236,0.3)]">
+                        <span className="material-symbols-outlined text-3xl text-primary">wifi</span>
+                    </div>
+                    <h3 className="text-xl font-black text-white mb-1">Conectate al WiFi</h3>
+                    <p className="text-slate-400 text-xs mb-6">Copiá la clave y navegá gratis.</p>
+
+                    <div className="space-y-3">
+                        <div className="bg-black/30 rounded-xl p-3 border border-white/5 flex items-center justify-between">
+                            <div className="text-left">
+                                <p className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Red</p>
+                                <p className="text-white font-medium text-sm truncate max-w-[150px]">{wifiSettings.ssid}</p>
+                            </div>
+                            <button onClick={() => copyToClipboard(wifiSettings.ssid, 'ssid')} className="p-2 bg-white/5 rounded-lg hover:bg-primary transition-colors group"><span className="material-symbols-outlined text-slate-400 group-hover:text-white text-lg">{copiedField === 'ssid' ? 'check' : 'content_copy'}</span></button>
+                        </div>
+                        <div className="bg-black/30 rounded-xl p-3 border border-white/5 flex items-center justify-between">
+                            <div className="text-left">
+                                <p className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Contraseña</p>
+                                <p className="text-white font-medium text-sm tracking-wider truncate max-w-[150px]">{wifiSettings.password}</p>
+                            </div>
+                            <button onClick={() => copyToClipboard(wifiSettings.password, 'pass')} className="p-2 bg-white/5 rounded-lg hover:bg-primary transition-colors group"><span className="material-symbols-outlined text-slate-400 group-hover:text-white text-lg">{copiedField === 'pass' ? 'check' : 'content_copy'}</span></button>
+                        </div>
+                    </div>
+                    {copiedField && (<div className="mt-4 h-4"><p className="text-primary text-[10px] font-bold animate-pulse uppercase tracking-wide">¡Copiado al portapapeles!</p></div>)}
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* --- FOOTER --- */}
+      <Footer wifiSettings={wifiSettings} onOpenWifi={() => setIsWifiModalOpen(true)} />
     </>
   );
 }

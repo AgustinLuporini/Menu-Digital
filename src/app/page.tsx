@@ -39,7 +39,7 @@ export default async function MenuPage() {
           />
         </div>
 
-        <Footer />
+
         
       </main>
     </div>

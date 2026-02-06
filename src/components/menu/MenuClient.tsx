@@ -100,43 +100,52 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         </button>
       )}
 
-      {/* --- NAVBAR STICKY (CENTRADO) --- */}
+      {/* --- NAVBAR STICKY (LÓGICA HÍBRIDA: CENTER + SCROLL) --- */}
       <nav 
-        className={`flex overflow-x-auto hide-scrollbar px-6 gap-8 border-b border-white/5 
-          sticky top-[61px] z-40 bg-[#101922]/95 backdrop-blur-md transition-transform duration-300 ease-in-out will-change-transform
-          justify-center
+        className={`
+          w-full border-b border-white/5 
+          sticky top-[61px] z-40 bg-[#101922]/95 backdrop-blur-md 
+          transition-transform duration-300 ease-in-out will-change-transform
+          overflow-x-auto hide-scrollbar
           ${isVisible ? "translate-y-0" : "-translate-y-[200%] pointer-events-none"}
         `}
       >
-        <button
-            onClick={() => setSelectedCategoryId(null)}
-            className={`flex flex-col items-center justify-center border-b-2 pb-2 pt-1 whitespace-nowrap transition-all duration-300 ${
-            selectedCategoryId === null
-                ? "border-accent text-accent text-glow"
-                : "border-transparent text-slate-500 hover:text-slate-300"
-            }`}
-        >
-            <span className="text-[10px] font-bold uppercase tracking-widest">Todos</span>
-        </button>
-        
-        {categories.map((cat) => {
-           const isActive = cat.id === selectedCategoryId;
-           return (
+        {/* SOLUCIÓN TÉCNICA:
+            - min-w-full: Asegura que el contenedor ocupe al menos toda la pantalla (para poder centrar si son pocos items).
+            - w-fit: Permite que el contenedor crezca más allá de la pantalla si hay muchos items (habilitando el scroll del padre).
+            - justify-center: Centra los items dentro de este contenedor.
+        */}
+        <div className="flex min-w-full w-fit justify-center px-6 gap-8">
             <button
-              key={cat.id}
-              onClick={() => setSelectedCategoryId(cat.id)}
-              className={`flex flex-col items-center justify-center border-b-2 pb-2 pt-1 whitespace-nowrap transition-all duration-300 ${
-                isActive
-                  ? "border-accent text-accent text-glow"
-                  : "border-transparent text-slate-500 hover:text-slate-300"
-              }`}
+                onClick={() => setSelectedCategoryId(null)}
+                className={`flex flex-col items-center justify-center border-b-2 pb-2 pt-1 whitespace-nowrap transition-all duration-300 ${
+                selectedCategoryId === null
+                    ? "border-accent text-accent text-glow"
+                    : "border-transparent text-slate-500 hover:text-slate-300"
+                }`}
             >
-              <span className="text-[10px] font-bold uppercase tracking-widest">
-                {cat.name}
-              </span>
+                <span className="text-[10px] font-bold uppercase tracking-widest">Todos</span>
             </button>
-           );
-        })}
+            
+            {categories.map((cat) => {
+            const isActive = cat.id === selectedCategoryId;
+            return (
+                <button
+                key={cat.id}
+                onClick={() => setSelectedCategoryId(cat.id)}
+                className={`flex flex-col items-center justify-center border-b-2 pb-2 pt-1 whitespace-nowrap transition-all duration-300 ${
+                    isActive
+                    ? "border-accent text-accent text-glow"
+                    : "border-transparent text-slate-500 hover:text-slate-300"
+                }`}
+                >
+                <span className="text-[10px] font-bold uppercase tracking-widest">
+                    {cat.name}
+                </span>
+                </button>
+            );
+            })}
+        </div>
       </nav>
 
       {/* --- HEADER CATEGORÍA --- */}
@@ -149,8 +158,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         </p>
       </div>
 
-      {/* --- LISTA DE PRODUCTOS (FLEX-1 PARA EMPUJAR FOOTER) --- */}
-      {/* CAMBIO AQUÍ: Agregado 'flex-1 w-full' y quitado 'min-h-[300px]' */}
+      {/* --- LISTA DE PRODUCTOS --- */}
       <div className="divide-y divide-white/5 flex-1 w-full" ref={parent}>
         {filteredProducts.map((product) => (
           <div 

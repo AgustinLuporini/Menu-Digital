@@ -42,9 +42,11 @@ function LoginForm() {
             return;
         }
 
-        // 3. EL PORTERO
+// 3. EL PORTERO
         if (profile?.role === 'reseller') {
-            router.push("/reseller");
+            // ANTES: router.push("/reseller");
+            // AHORA:
+            router.push("/reseller/dashboard"); 
         } else {
             router.push("/admin");
         }

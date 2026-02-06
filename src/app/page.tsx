@@ -262,11 +262,11 @@ export default function LandingPage() {
                </div>
             </div>
 
-            <Link href="/login">
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white px-10 h-14 rounded-full text-lg font-bold shadow-lg shadow-orange-500/20 hover:scale-105 transition-transform">
-                  Quiero ser Partner
-                </Button>
-            </Link>
+<Link href="/reseller"> 
+    <Button className="bg-orange-500 hover:bg-orange-600 text-white px-10 h-14 rounded-full text-lg font-bold shadow-lg shadow-orange-500/20 hover:scale-105 transition-transform">
+      Quiero ser Partner
+    </Button>
+</Link>
         </div>
       </section>
 

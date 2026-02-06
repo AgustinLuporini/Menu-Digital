@@ -158,6 +158,7 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
+      
       </section>
 
       {/* --- SECCIÓN 3: PARA EL DUEÑO (ID: features) --- */}

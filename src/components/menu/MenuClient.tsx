@@ -80,11 +80,6 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
     ? products.filter((p) => p.category_id === selectedCategoryId)
     : products;
 
-  const currentCategoryName = categories.find(c => c.id === selectedCategoryId)?.name || "Nuestra Carta";
-  const currentCategoryDesc = selectedCategoryId 
-    ? `Nuestras opciones de ${currentCategoryName.toLowerCase()}.` 
-    : "Seleccioná una categoría para comenzar.";
-
   const hasWifi = wifiSettings.ssid && wifiSettings.ssid.trim() !== "";
 
   return (
@@ -100,96 +95,108 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         </button>
       )}
 
-      {/* --- NAVBAR STICKY (LÓGICA HÍBRIDA: CENTER + SCROLL) --- */}
+      {/* --- NAVBAR STICKY (ESTILO PASTILLAS) --- */}
       <nav 
         className={`
           w-full border-b border-white/5 
-          sticky top-[61px] z-40 bg-[#101922]/95 backdrop-blur-md 
+          sticky top-[61px] z-40 
+          bg-[#101922]
+          -mt-[1px]
+          py-3 /* Un poco más de padding vertical para las pastillas */
           transition-transform duration-300 ease-in-out will-change-transform
-          overflow-x-auto hide-scrollbar
           ${isVisible ? "translate-y-0" : "-translate-y-[200%] pointer-events-none"}
         `}
       >
-        {/* SOLUCIÓN TÉCNICA:
-            - min-w-full: Asegura que el contenedor ocupe al menos toda la pantalla (para poder centrar si son pocos items).
-            - w-fit: Permite que el contenedor crezca más allá de la pantalla si hay muchos items (habilitando el scroll del padre).
-            - justify-center: Centra los items dentro de este contenedor.
-        */}
-        <div className="flex min-w-full w-fit justify-center px-6 gap-8">
-            <button
-                onClick={() => setSelectedCategoryId(null)}
-                className={`flex flex-col items-center justify-center border-b-2 pb-2 pt-1 whitespace-nowrap transition-all duration-300 ${
-                selectedCategoryId === null
-                    ? "border-accent text-accent text-glow"
-                    : "border-transparent text-slate-500 hover:text-slate-300"
-                }`}
-            >
-                <span className="text-[10px] font-bold uppercase tracking-widest">Todos</span>
-            </button>
+        <div className="relative w-full">
             
-            {categories.map((cat) => {
-            const isActive = cat.id === selectedCategoryId;
-            return (
-                <button
-                key={cat.id}
-                onClick={() => setSelectedCategoryId(cat.id)}
-                className={`flex flex-col items-center justify-center border-b-2 pb-2 pt-1 whitespace-nowrap transition-all duration-300 ${
-                    isActive
-                    ? "border-accent text-accent text-glow"
-                    : "border-transparent text-slate-500 hover:text-slate-300"
-                }`}
-                >
-                <span className="text-[10px] font-bold uppercase tracking-widest">
-                    {cat.name}
-                </span>
-                </button>
-            );
-            })}
+            {/* Scroll Container */}
+            <div className="flex overflow-x-auto hide-scrollbar w-full px-4 scroll-smooth">
+                <div className="flex min-w-full w-fit justify-start md:justify-center gap-3">
+                    {/* Botón TODOS */}
+                    <button
+                        onClick={() => setSelectedCategoryId(null)}
+                        className={`
+                            px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide transition-all whitespace-nowrap border
+                            ${selectedCategoryId === null
+                                ? "bg-white text-black border-white shadow-lg shadow-white/10 scale-105" // Activo: Blanco brillante
+                                : "bg-white/5 text-slate-400 border-transparent hover:bg-white/10 hover:text-white" // Inactivo: Gris sutil
+                            }
+                        `}
+                    >
+                        Todos
+                    </button>
+                    
+                    {/* Botones CATEGORÍAS */}
+                    {categories.map((cat) => {
+                    const isActive = cat.id === selectedCategoryId;
+                    return (
+                        <button
+                        key={cat.id}
+                        onClick={() => setSelectedCategoryId(cat.id)}
+                        className={`
+                            px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide transition-all whitespace-nowrap border
+                            ${isActive
+                                ? "bg-white text-black border-white shadow-lg shadow-white/10 scale-105"
+                                : "bg-white/5 text-slate-400 border-transparent hover:bg-white/10 hover:text-white"
+                            }
+                        `}
+                        >
+                            {cat.name}
+                        </button>
+                    );
+                    })}
+                    
+                    {/* Espaciador final */}
+                    <div className="w-8 shrink-0 md:hidden"></div>
+                </div>
+            </div>
+
+            {/* --- INDICADOR DE SCROLL + FLECHA --- */}
+            {/* Degradado negro con una flechita sutil para indicar "más a la derecha" */}
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#101922] via-[#101922] to-transparent pointer-events-none z-10 md:hidden flex items-center justify-end pr-1">
+                <span className="material-symbols-outlined text-white/50 text-xl animate-pulse">chevron_right</span>
+            </div>
         </div>
       </nav>
 
-      {/* --- HEADER CATEGORÍA --- */}
-      <div className="px-6 pt-6 pb-2 text-center">
-        <h2 className="text-xl font-bold text-white mb-0.5 animate-fade-in">
-          {currentCategoryName}
-        </h2>
-        <p className="text-[12px] text-slate-500 font-medium">
-          {currentCategoryDesc}
-        </p>
-      </div>
-
       {/* --- LISTA DE PRODUCTOS --- */}
-      <div className="divide-y divide-white/5 flex-1 w-full" ref={parent}>
+      <div className="divide-y divide-white/5 flex-1 w-full pt-4" ref={parent}>
         {filteredProducts.map((product) => (
           <div 
             key={product.id} 
             onClick={() => setSelectedProduct(product)}
-            className="px-6 py-4 hover:bg-white/5 transition-colors cursor-pointer group active:bg-white/10"
+            className="px-6 py-6 hover:bg-white/5 transition-colors cursor-pointer group active:bg-white/10"
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-start gap-5">
+              {/* IMAGEN GRANDE */}
               <div 
-                className="w-16 h-16 bg-center bg-no-repeat bg-cover rounded-lg shrink-0 border border-white/10 group-hover:border-accent/50 transition-colors bg-slate-800" 
+                className="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl shrink-0 border border-white/10 group-hover:border-accent/50 transition-colors bg-slate-800 shadow-lg" 
                 style={{ backgroundImage: `url("${product.image_url}")` }} 
               ></div>
-              <div className="flex flex-1 flex-col justify-center min-w-0">
-                <h3 className="text-white text-[15px] font-bold leading-tight mb-0.5 group-hover:text-accent transition-colors truncate pr-2">
-                  {product.name}
-                </h3>
-                <p className="text-slate-400 text-[12px] font-normal leading-snug line-clamp-2">
-                  {product.description}
-                </p>
-              </div>
-              <div className="text-right shrink-0">
-                <p className="text-accent text-[15px] font-bold tracking-tight">
-                  ${product.price.toLocaleString("es-AR")}
-                </p>
+              
+              <div className="flex flex-1 flex-col justify-between min-w-0 h-24 py-1">
+                <div>
+                    <h3 className="text-white text-[17px] font-bold leading-tight mb-1.5 group-hover:text-accent transition-colors truncate pr-2">
+                    {product.name}
+                    </h3>
+                    <p className="text-slate-400 text-[13px] font-normal leading-snug line-clamp-2">
+                    {product.description}
+                    </p>
+                </div>
+                
+                <div className="text-right mt-auto">
+                    <p className="text-accent text-[16px] font-bold tracking-tight">
+                    ${product.price.toLocaleString("es-AR")}
+                    </p>
+                </div>
               </div>
             </div>
           </div>
         ))}
         
         {filteredProducts.length === 0 && (
-            <div className="py-12 text-center text-slate-500 text-sm">
+            <div className="py-20 text-center text-slate-500 text-sm flex flex-col items-center">
+                <span className="material-symbols-outlined text-4xl mb-2 opacity-50">restaurant_menu</span>
                 No hay productos en esta categoría.
             </div>
         )}
@@ -209,26 +216,28 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
                     <span className="material-symbols-outlined text-xl">close</span>
                 </button>
                 <div 
-                    className="w-full h-64 bg-cover bg-center relative"
+                    className="w-full h-80 bg-cover bg-center relative"
                     style={{ backgroundImage: `url('${selectedProduct.image_url}')` }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
                 </div>
-                <div className="p-8 -mt-10 relative">
-                    <div className="mb-4">
-                        <span className="px-3 py-1 bg-primary/20 text-primary border border-primary/20 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                <div className="p-8 -mt-6 relative bg-[#1A1A1A] rounded-t-[2rem]">
+                    <div className="flex justify-center -mt-14 mb-6">
+                         {/* Badge flotante de Categoría */}
+                        <span className="px-4 py-1.5 bg-accent text-white border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
                             {categories.find(c => c.id === selectedProduct.category_id)?.name}
                         </span>
                     </div>
-                    <h3 className="text-2xl font-black text-white leading-tight mb-2">
+                    
+                    <h3 className="text-3xl font-black text-white leading-tight mb-4 text-center">
                         {selectedProduct.name}
                     </h3>
-                    <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p className="text-slate-300 text-base leading-relaxed mb-8 text-center text-opacity-90">
                         {selectedProduct.description}
                     </p>
                     <div className="flex items-center justify-between pt-6 border-t border-white/10">
                         <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Precio</span>
-                        <span className="text-3xl font-black text-accent tracking-tight">
+                        <span className="text-4xl font-black text-accent tracking-tight">
                             ${selectedProduct.price.toLocaleString("es-AR")}
                         </span>
                     </div>

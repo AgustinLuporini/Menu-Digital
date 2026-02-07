@@ -42,10 +42,8 @@ function LoginForm() {
             return;
         }
 
-// 3. EL PORTERO
+        // 3. EL PORTERO
         if (profile?.role === 'reseller') {
-            // ANTES: router.push("/reseller");
-            // AHORA:
             router.push("/reseller/dashboard"); 
         } else {
             router.push("/admin");
@@ -59,32 +57,40 @@ function LoginForm() {
     }
   };
 
-  // Estilos visuales (Partners vs Clientes)
+  // Estilos visuales
   const isPartner = roleParam === 'partner';
   
   // Título e Ícono
-  const themeTitle = isPartner ? 'Acceso Partners' : '¡Hola de nuevo!';
+  const themeTitle = isPartner ? 'Portal Partners' : '¡Hola de nuevo!';
   const themeIcon = isPartner ? 'handshake' : 'restaurant'; 
   
-  // Colores Dinámicos (Partner = Violeta / Dueño = Naranja Devoys)
+  // Colores Dinámicos: AHORA TODO ES NARANJA
+  // Partner usa orange-600 (más sobrio) y Dueño usa orange-500 (más brillante)
   const bgButton = isPartner 
-    ? 'bg-purple-600 hover:bg-purple-700 shadow-purple-500/20 text-white' 
+    ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20 text-white' 
     : 'bg-orange-500 hover:bg-orange-600 shadow-orange-500/20 text-white';
     
-  const iconContainerClass = isPartner 
-    ? 'bg-purple-50 text-purple-600 shadow-purple-100' 
-    : 'bg-orange-50 text-orange-600 shadow-orange-100';
+  // El contenedor del icono siempre naranja suave
+  const iconContainerClass = 'bg-orange-50 text-orange-600 shadow-orange-100';
 
   return (
     <div className="w-full max-w-[400px] bg-white border border-slate-100 p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 animate-fade-in relative z-10">
         
+        {/* Header del Login */}
         <div className="text-center mb-10">
             <div className={`size-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg ${iconContainerClass} transition-all duration-500`}>
                 <span className="material-symbols-outlined text-3xl">{themeIcon}</span>
             </div>
+            
+            {isPartner && (
+                <div className="inline-block px-3 py-1 mb-3 rounded-full bg-orange-100 border border-orange-200 text-[10px] font-bold text-orange-700 uppercase tracking-widest">
+                    Modo Reseller
+                </div>
+            )}
+
             <h1 className="text-3xl font-black tracking-tight text-slate-900 mb-2">{themeTitle}</h1>
             <p className="text-slate-500 text-sm font-medium">
-                {isPartner ? 'Panel de control para revendedores.' : 'Ingresá para gestionar tu menú digital.'}
+                {isPartner ? 'Gestioná tu cartera de clientes.' : 'Ingresá para gestionar tu menú digital.'}
             </p>
         </div>
 

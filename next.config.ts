@@ -1,15 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // Dejalo vacío por ahora. Vercel se encarga de todo.
-  basePath: "/menu",
-
+  // Dejá esto vacío. No fuerces rutas si estás en tu propio dominio.
+  
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**', // Esto permite cargar imágenes de Supabase/cualquier lado
+        hostname: '**', 
       },
     ],
   },

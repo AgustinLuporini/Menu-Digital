@@ -6,23 +6,53 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Users, Smartphone, QrCode, ChefHat, Rocket } from "lucide-react";
 
-// --- DATOS DEL CARRUSEL (Sin cambios) ---
+// --- CONFIGURACIÓN DE IMÁGENES ---
+// ✅ Esta es la URL correcta armada con tu ID de proyecto
+const SUPABASE_URL = "https://zrweexxbhoigpcgbfuqf.supabase.co/storage/v1/object/public/menu-images"; 
+
+// --- DATOS DEL CARRUSEL ---
+// Asegurate de subir los archivos con ESTOS NOMBRES EXACTOS a tu bucket en Supabase:
+// screen1.png, screen2.png, screen3.png, screen4.png
 const SLIDES = [
   {
-    id: 1, type: "VISTA CLIENTE", title: "Navegación Intuitiva", description: "Tus clientes escanean y piden. Sin descargas.", image: "/screenshots/screen1.png", icon: "touch_app", colorClass: "bg-orange-500 shadow-orange-500/20"
+    id: 1, 
+    type: "VISTA CLIENTE", 
+    title: "Navegación Intuitiva", 
+    description: "Tus clientes escanean y piden. Sin descargas.", 
+    image: `${SUPABASE_URL}/screen1.png`, 
+    icon: "touch_app", 
+    colorClass: "bg-orange-500 shadow-orange-500/20"
   },
   {
-    id: 2, type: "DETALLE PRODUCTO", title: "Experiencia Visual", description: "Fotos en HD y descripciones claras.", image: "/screenshots/screen2.png", icon: "restaurant", colorClass: "bg-blue-500 shadow-blue-500/20"
+    id: 2, 
+    type: "DETALLE PRODUCTO", 
+    title: "Experiencia Visual", 
+    description: "Fotos en HD y descripciones claras.", 
+    image: `${SUPABASE_URL}/screen2.png`, 
+    icon: "restaurant", 
+    colorClass: "bg-blue-500 shadow-blue-500/20"
   },
   {
-    id: 3, type: "PANEL ADMIN", title: "Control Total", description: "Gestioná categorías y visibilidad al instante.", image: "/screenshots/screen3.png", icon: "dashboard", colorClass: "bg-slate-900 shadow-slate-900/20"
+    id: 3, 
+    type: "PANEL ADMIN", 
+    title: "Control Total", 
+    description: "Gestioná categorías y visibilidad al instante.", 
+    image: `${SUPABASE_URL}/screen3.png`, 
+    icon: "dashboard", 
+    colorClass: "bg-slate-900 shadow-slate-900/20"
   },
   {
-    id: 4, type: "EDICIÓN RÁPIDA", title: "Autogestión 100%", description: "Cambiá precios o stock en segundos.", image: "/screenshots/screen4.png", icon: "edit_square", colorClass: "bg-green-600 shadow-green-600/20"
+    id: 4, 
+    type: "EDICIÓN RÁPIDA", 
+    title: "Autogestión 100%", 
+    description: "Cambiá precios o stock en segundos.", 
+    image: `${SUPABASE_URL}/screen4.png`, 
+    icon: "edit_square", 
+    colorClass: "bg-green-600 shadow-green-600/20"
   }
 ];
 
-// --- COMPONENTE PANTALLA (Sin cambios) ---
+// --- COMPONENTE PANTALLA ---
 const PhoneScreenCarousel = ({ currentSlide }: { currentSlide: number }) => {
   return (
     <div className="w-full h-full relative bg-gray-50 text-white overflow-hidden font-sans">
@@ -121,11 +151,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN NUEVA UBICACIÓN: CÓMO FUNCIONA (ID: how-it-works) --- */}
+      {/* --- CÓMO FUNCIONA --- */}
       <section id="how-it-works" className="py-20 bg-slate-50 border-y border-slate-200 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-black text-slate-900 mb-12">En marcha en minutos</h2>
-          {/* Cambiado a grid de 4 columnas */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all">
                <div className="size-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600">
@@ -148,7 +177,6 @@ export default function LandingPage() {
                <h3 className="text-lg font-bold mb-2">3. Imprimí el QR</h3>
                <p className="text-slate-500 text-xs">Descargá tu código QR listo para poner en las mesas.</p>
             </div>
-            {/* 4ta Tarjeta Nueva */}
             <div className="p-6 rounded-2xl bg-green-50 border border-green-100 shadow-sm hover:shadow-md transition-all">
                <div className="size-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
                  <Rocket className="w-6 h-6" />
@@ -158,16 +186,15 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      
       </section>
 
-      {/* --- SECCIÓN 3: PARA EL DUEÑO (ID: features) --- */}
+      {/* --- SECCIÓN 3: PARA EL DUEÑO --- */}
       <section id="features" className="py-20 px-6 overflow-hidden scroll-mt-20">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
-            {/* Imagen Admin */}
+            {/* Imagen Admin con Supabase */}
             <div className="relative order-2 lg:order-1 flex justify-center items-center">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-slate-100 rounded-3xl rotate-3 transform -z-10"></div>
-                <img src="/screenshots/screen3.png" alt="Panel Admin" className="rounded-xl shadow-xl border border-slate-200 w-[312px] relative z-10" />
+                <img src={`${SUPABASE_URL}/screen3.png`} alt="Panel Admin" className="rounded-xl shadow-xl border border-slate-200 w-[312px] relative z-10" />
                 <div className="absolute -bottom-3 -right-3 bg-white p-2 rounded-lg shadow-lg border border-slate-100 flex items-center gap-2 animate-bounce-slow z-20">
                     <div className="size-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center"><span className="material-symbols-outlined text-xs">check</span></div>
                     <div>
@@ -220,10 +247,10 @@ export default function LandingPage() {
                     </div>
                 </div>
             </div>
-            {/* Imagen Cliente */}
+            {/* Imagen Cliente con Supabase */}
             <div className="relative flex justify-center">
                 <div className="absolute top-10 right-10 size-32 bg-orange-200 rounded-full blur-[60px] opacity-60"></div>
-                <img src="/screenshots/screen1.png" alt="Vista Cliente" className="relative z-10 w-[280px] rounded-[2.5rem] shadow-2xl border-[8px] border-white" />
+                <img src={`${SUPABASE_URL}/screen1.png`} alt="Vista Cliente" className="relative z-10 w-[280px] rounded-[2.5rem] shadow-2xl border-[8px] border-white" />
                 <div className="absolute top-20 -right-4 bg-white px-4 py-2 rounded-lg shadow-lg border border-slate-100 z-20 text-xs font-bold text-slate-700 animate-pulse">
                     🍔 ¡Qué buena pinta!
                 </div>
@@ -231,11 +258,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN NUEVA: PARTNERS (ID: partners) --- */}
+      {/* --- SECCIÓN PARTNERS --- */}
       <section id="partners" className="py-20 bg-slate-900 text-white relative overflow-hidden scroll-mt-20">
-        {/* Decoración de fondo */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-        
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider mb-6">
               <Users className="w-3 h-3" /> Programa de Partners
@@ -246,7 +271,6 @@ export default function LandingPage() {
             <p className="text-slate-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
               Sumá Devoys a tu cartera. Ofrecé tecnología de punta a tus clientes y generá ingresos recurrentes sin programar.
             </p>
-            
             <div className="flex flex-wrap justify-center gap-8 mb-10 text-slate-300">
                <div className="flex items-center gap-2">
                  <div className="p-1 bg-green-500/20 rounded-full"><CheckCircle2 className="w-4 h-4 text-green-400" /></div>
@@ -261,19 +285,17 @@ export default function LandingPage() {
                  <span>Comisiones recurrentes</span>
                </div>
             </div>
-
-<Link href="/reseller"> 
-    <Button className="bg-orange-500 hover:bg-orange-600 text-white px-10 h-14 rounded-full text-lg font-bold shadow-lg shadow-orange-500/20 hover:scale-105 transition-transform">
-      Quiero ser Partner
-    </Button>
-</Link>
+            <Link href="/reseller"> 
+                <Button className="bg-orange-500 hover:bg-orange-600 text-white px-10 h-14 rounded-full text-lg font-bold shadow-lg shadow-orange-500/20 hover:scale-105 transition-transform">
+                  Quiero ser Partner
+                </Button>
+            </Link>
         </div>
       </section>
 
-      {/* --- SECCIÓN 5: FINAL CTA (ID: contact) --- */}
+      {/* --- CTA FINAL --- */}
       <section id="contact" className="py-24 px-6 bg-orange-500 relative overflow-hidden scroll-mt-20">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-          
           <div className="max-w-4xl mx-auto text-center relative z-10 text-white">
               <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">¿Listo para transformar tu restaurante?</h2>
               <p className="text-orange-100 text-lg mb-10 max-w-2xl mx-auto font-medium">
@@ -291,7 +313,7 @@ export default function LandingPage() {
           </div>
       </section>
 
-      {/* Footer Simple */}
+      {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-12 px-6 text-center text-sm">
           <p>© 2026 Devoys Software. Todos los derechos reservados.</p>
       </footer>

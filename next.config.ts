@@ -3,7 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   // Dejalo vacío por ahora. Vercel se encarga de todo.
-  
+  basePath: "/menu",
+
   images: {
     remotePatterns: [
       {

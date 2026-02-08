@@ -93,13 +93,13 @@ export default function LandingPage() {
             </Link>
 
             <div className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-500">
-                <a href="#how-it-works" className="hover:text-orange-600 transition-colors">Cómo funciona</a>
+                <a href="#how-it-works" className="hover:text-orange-600 transition-colors">¿Cómo Funciona?</a>
                 <a href="#pricing" className="hover:text-orange-600 transition-colors">Precios</a>
-                <a href="#partners" className="hover:text-orange-600 transition-colors">Partners</a>
+                <a href="#partners" className="hover:text-orange-600 transition-colors">Convertite en Partner</a>
             </div>
 
             <div className="flex gap-3 items-center">
-                <Link href="/login?role=partner" className="hidden md:block px-4 py-2 bg-white border border-orange-200 text-orange-600 font-bold rounded-full text-xs hover:bg-orange-50 transition-all">
+                <Link href="/login?role=partner" className="hidden md:block px-5 py-2.5 bg-white border border-orange-200 text-orange-600 font-bold rounded-full text-sm hover:bg-orange-50 transition-all">
                     Soy Partner
                 </Link>
                 <Link href="/login" className="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
@@ -132,6 +132,7 @@ export default function LandingPage() {
                     La única plataforma que combina una carta digital de lujo para tus clientes con un panel de control ultra rápido para vos.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
+                    {/* BOTÓN VER DEMO */}
                     <Link href="/menu/tu-restaurante" target="_blank" className="px-10 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-lg shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-1 text-center flex items-center justify-center gap-2 transition-all">
                         <Eye className="w-5 h-5" />
                         Ver Demo en Vivo
@@ -278,16 +279,16 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN PRICING (Compacta y Blanca) --- */}
-      <section id="pricing" className="py-16 px-6 bg-white border-t border-slate-100 relative scroll-mt-20">
-        <div className="max-w-7xl mx-auto">
+      {/* --- SECCIÓN PRICING (Altura ajustada) --- */}
+      <section id="pricing" className="py-20 px-6 bg-orange-600 relative scroll-mt-20">
+        <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-10">
-                 <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Precio Simple.</h2>
-                 <p className="text-slate-500 text-lg">Digitalizá tu negocio hoy mismo.</p>
+                 <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Precio Simple.</h2>
+                 <p className="text-orange-100 text-lg font-medium">Digitalizá tu negocio hoy mismo.</p>
             </div>
 
-            {/* Tarjeta Compacta */}
-            <div className="max-w-sm mx-auto bg-white rounded-3xl p-8 shadow-xl border border-orange-100 ring-4 ring-orange-500/5 relative overflow-hidden">
+            {/* Tarjeta: altura compactada para equiparar */}
+            <div className="max-w-sm mx-auto bg-white rounded-[2.5rem] px-8 py-10 shadow-2xl relative overflow-hidden">
                 <div className="text-center mb-6 border-b border-slate-100 pb-6">
                     <div className="flex items-start justify-center gap-1">
                         <span className="text-2xl font-bold text-slate-900 mt-2">$</span>
@@ -296,28 +297,29 @@ export default function LandingPage() {
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Mensual</p>
                 </div>
 
-                <div className="space-y-3 mb-8">
+                <div className="space-y-4 mb-8">
                     <div className="flex items-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
-                        <span className="text-slate-600 text-sm font-medium">Carga de productos ilimitada</span>
+                        <CheckCircle2 className="w-6 h-6 text-green-500 shrink-0"/>
+                        <span className="text-slate-700 font-medium text-lg">Carga ilimitada</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
-                        <span className="text-slate-600 text-sm font-medium">Panel de autogestión en vivo</span>
+                        <CheckCircle2 className="w-6 h-6 text-green-500 shrink-0"/>
+                        <span className="text-slate-700 font-medium text-lg">Panel de autogestión</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
-                        <span className="text-slate-600 text-sm font-medium">Fotos en alta definición</span>
+                        <CheckCircle2 className="w-6 h-6 text-green-500 shrink-0"/>
+                        <span className="text-slate-700 font-medium text-lg">Fotos en HD</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
-                        <span className="text-slate-600 text-sm font-medium">Generador de QR incluido</span>
+                        <CheckCircle2 className="w-6 h-6 text-green-500 shrink-0"/>
+                        <span className="text-slate-700 font-medium text-lg">QR incluido</span>
                     </div>
                 </div>
 
-                <Link href="/login" className="block w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center text-sm shadow-lg hover:-translate-y-0.5 transition-all">
+                <Link href="/login" className="block w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center text-lg shadow-lg hover:-translate-y-0.5 transition-all">
                     Empezar Ahora
                 </Link>
+                <p className="text-center text-xs text-slate-400 mt-4">Sin contratos. Cancelás cuando querés.</p>
             </div>
         </div>
       </section>

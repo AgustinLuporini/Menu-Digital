@@ -99,10 +99,12 @@ export default function LandingPage() {
             </div>
 
             <div className="flex gap-3 items-center">
-                <Link href="/login?role=partner" className="hidden md:block px-5 py-2.5 bg-white border border-orange-200 text-orange-600 font-bold rounded-full text-sm hover:bg-orange-50 transition-all">
+                {/* Botón Partner - Altura ajustada (h-10) */}
+                <Link href="/login?role=partner" className="hidden md:flex items-center justify-center px-5 h-10 bg-white border border-orange-200 text-orange-600 font-bold rounded-full text-sm hover:bg-orange-50 transition-all">
                     Soy Partner
                 </Link>
-                <Link href="/login" className="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                {/* Botón Restaurante - Altura ajustada (h-10) */}
+                <Link href="/login" className="flex items-center justify-center px-6 h-10 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
                     Ingresar Restaurante
                 </Link>
             </div>
@@ -132,8 +134,8 @@ export default function LandingPage() {
                     La única plataforma que combina una carta digital de lujo para tus clientes con un panel de control ultra rápido para vos.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                    {/* BOTÓN VER DEMO */}
-                    <Link href="/menu/tu-restaurante" target="_blank" className="px-10 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-lg shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-1 text-center flex items-center justify-center gap-2 transition-all">
+                    {/* BOTÓN VER DEMO - URL CORREGIDA (Sin /menu) */}
+                    <Link href="/tu-restaurante" target="_blank" className="px-10 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-lg shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-1 text-center flex items-center justify-center gap-2 transition-all">
                         <Eye className="w-5 h-5" />
                         Ver Demo en Vivo
                     </Link>
@@ -279,7 +281,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN PRICING (Altura ajustada) --- */}
+      {/* --- SECCIÓN PRICING (Tarjeta Alta) --- */}
       <section id="pricing" className="py-20 px-6 bg-orange-600 relative scroll-mt-20">
         <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-10">
@@ -287,9 +289,9 @@ export default function LandingPage() {
                  <p className="text-orange-100 text-lg font-medium">Digitalizá tu negocio hoy mismo.</p>
             </div>
 
-            {/* Tarjeta: altura compactada para equiparar */}
-            <div className="max-w-sm mx-auto bg-white rounded-[2.5rem] px-8 py-10 shadow-2xl relative overflow-hidden">
-                <div className="text-center mb-6 border-b border-slate-100 pb-6">
+            {/* Tarjeta con más altura (py-14, space-y-8) */}
+            <div className="max-w-sm mx-auto bg-white rounded-[2.5rem] px-8 py-14 shadow-2xl relative overflow-hidden">
+                <div className="text-center mb-10 border-b border-slate-100 pb-8">
                     <div className="flex items-start justify-center gap-1">
                         <span className="text-2xl font-bold text-slate-900 mt-2">$</span>
                         <span className="text-6xl font-black text-slate-900 tracking-tighter">30.000</span>
@@ -297,7 +299,7 @@ export default function LandingPage() {
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Mensual</p>
                 </div>
 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-8 mb-12">
                     <div className="flex items-center gap-3">
                         <CheckCircle2 className="w-6 h-6 text-green-500 shrink-0"/>
                         <span className="text-slate-700 font-medium text-lg">Carga ilimitada</span>
@@ -319,7 +321,7 @@ export default function LandingPage() {
                 <Link href="/login" className="block w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center text-lg shadow-lg hover:-translate-y-0.5 transition-all">
                     Empezar Ahora
                 </Link>
-                <p className="text-center text-xs text-slate-400 mt-4">Sin contratos. Cancelás cuando querés.</p>
+                <p className="text-center text-xs text-slate-400 mt-6">Sin contratos. Cancelás cuando querés.</p>
             </div>
         </div>
       </section>

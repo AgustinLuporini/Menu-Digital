@@ -4,15 +4,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Users, Smartphone, QrCode, ChefHat, Rocket } from "lucide-react";
+import { CheckCircle2, Users, Smartphone, QrCode, ChefHat, Rocket, Eye } from "lucide-react";
 
 // --- CONFIGURACIÓN DE IMÁGENES ---
-// ✅ Esta es la URL correcta armada con tu ID de proyecto
 const SUPABASE_URL = "https://zrweexxbhoigpcgbfuqf.supabase.co/storage/v1/object/public/menu-images"; 
 
 // --- DATOS DEL CARRUSEL ---
-// Asegurate de subir los archivos con ESTOS NOMBRES EXACTOS a tu bucket en Supabase:
-// screen1.png, screen2.png, screen3.png, screen4.png
 const SLIDES = [
   {
     id: 1, 
@@ -85,7 +82,32 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-orange-100 overflow-x-hidden">
 
-      <Navbar />
+      {/* --- NAVBAR --- */}
+      <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 group">
+                <div className="size-9 bg-orange-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform">
+                    <span className="material-symbols-outlined text-lg">restaurant</span>
+                </div>
+                <span className="font-black text-xl tracking-tight text-slate-900">Devoys</span>
+            </Link>
+
+            <div className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-500">
+                <a href="#how-it-works" className="hover:text-orange-600 transition-colors">Cómo funciona</a>
+                <a href="#pricing" className="hover:text-orange-600 transition-colors">Precios</a>
+                <a href="#partners" className="hover:text-orange-600 transition-colors">Partners</a>
+            </div>
+
+            <div className="flex gap-3 items-center">
+                <Link href="/login?role=partner" className="hidden md:block px-4 py-2 bg-white border border-orange-200 text-orange-600 font-bold rounded-full text-xs hover:bg-orange-50 transition-all">
+                    Soy Partner
+                </Link>
+                <Link href="/login" className="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-sm transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                    Ingresar Restaurante
+                </Link>
+            </div>
+        </div>
+      </nav>
 
       {/* --- HERO SECTION --- */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-6 overflow-hidden">
@@ -110,14 +132,12 @@ export default function LandingPage() {
                     La única plataforma que combina una carta digital de lujo para tus clientes con un panel de control ultra rápido para vos.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                    <Link href="/club-cheka" target="_blank" className="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-full transition-all shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-1 text-center flex items-center justify-center gap-2">
-                        <span className="material-symbols-outlined">visibility</span>
-                        Ver Ejemplo Real
-                    </Link>
-                    <Link href="/login" className="px-8 py-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-full transition-all hover:border-slate-300 flex items-center justify-center gap-2">
-                        Crear mi Cuenta
+                    <Link href="/menu/tu-restaurante" target="_blank" className="px-10 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full text-lg shadow-xl shadow-orange-500/30 hover:shadow-orange-500/40 hover:-translate-y-1 text-center flex items-center justify-center gap-2 transition-all">
+                        <Eye className="w-5 h-5" />
+                        Ver Demo en Vivo
                     </Link>
                 </div>
+                <p className="mt-4 text-xs text-slate-400 font-medium ml-2">Sin tarjeta de crédito • Cancelás cuando quieras</p>
             </div>
 
             {/* Celular Hero */}
@@ -258,8 +278,52 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN PARTNERS --- */}
-      <section id="partners" className="py-20 bg-slate-900 text-white relative overflow-hidden scroll-mt-20">
+      {/* --- SECCIÓN PRICING (Compacta y Blanca) --- */}
+      <section id="pricing" className="py-16 px-6 bg-white border-t border-slate-100 relative scroll-mt-20">
+        <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-10">
+                 <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">Precio Simple.</h2>
+                 <p className="text-slate-500 text-lg">Digitalizá tu negocio hoy mismo.</p>
+            </div>
+
+            {/* Tarjeta Compacta */}
+            <div className="max-w-sm mx-auto bg-white rounded-3xl p-8 shadow-xl border border-orange-100 ring-4 ring-orange-500/5 relative overflow-hidden">
+                <div className="text-center mb-6 border-b border-slate-100 pb-6">
+                    <div className="flex items-start justify-center gap-1">
+                        <span className="text-2xl font-bold text-slate-900 mt-2">$</span>
+                        <span className="text-6xl font-black text-slate-900 tracking-tighter">30.000</span>
+                    </div>
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Mensual</p>
+                </div>
+
+                <div className="space-y-3 mb-8">
+                    <div className="flex items-center gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
+                        <span className="text-slate-600 text-sm font-medium">Carga de productos ilimitada</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
+                        <span className="text-slate-600 text-sm font-medium">Panel de autogestión en vivo</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
+                        <span className="text-slate-600 text-sm font-medium">Fotos en alta definición</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0"/>
+                        <span className="text-slate-600 text-sm font-medium">Generador de QR incluido</span>
+                    </div>
+                </div>
+
+                <Link href="/login" className="block w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-center text-sm shadow-lg hover:-translate-y-0.5 transition-all">
+                    Empezar Ahora
+                </Link>
+            </div>
+        </div>
+      </section>
+
+      {/* --- SECCIÓN PARTNERS (Fondo #0E1628) --- */}
+      <section id="partners" className="py-20 bg-[#0E1628] text-white relative overflow-hidden scroll-mt-20">
         <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider mb-6">
@@ -286,35 +350,15 @@ export default function LandingPage() {
                </div>
             </div>
             <Link href="/reseller"> 
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white px-10 h-14 rounded-full text-lg font-bold shadow-lg shadow-orange-500/20 hover:scale-105 transition-transform">
+                <Button className="bg-orange-600 hover:bg-orange-500 text-white px-10 h-14 rounded-full text-lg font-bold shadow-lg shadow-orange-500/20 hover:scale-105 transition-transform">
                   Quiero ser Partner
                 </Button>
             </Link>
         </div>
       </section>
 
-      {/* --- CTA FINAL --- */}
-      <section id="contact" className="py-24 px-6 bg-orange-500 relative overflow-hidden scroll-mt-20">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-          <div className="max-w-4xl mx-auto text-center relative z-10 text-white">
-              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">¿Listo para transformar tu restaurante?</h2>
-              <p className="text-orange-100 text-lg mb-10 max-w-2xl mx-auto font-medium">
-                  Sumate a los cientos de locales que ya digitalizaron su carta. Empezá gratis hoy mismo.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <Link href="/login" className="px-10 py-4 bg-white text-orange-600 font-bold rounded-full text-lg shadow-2xl hover:shadow-orange-900/20 hover:scale-105 transition-all">
-                      Empezar Prueba Gratis
-                  </Link>
-                  <a href="https://wa.me/5491100000000" target="_blank" className="px-10 py-4 bg-orange-600 border border-orange-400 text-white font-bold rounded-full text-lg hover:bg-orange-700 transition-all flex items-center justify-center gap-2">
-                      <span className="material-symbols-outlined">chat</span>
-                      Hablar con Ventas
-                  </a>
-              </div>
-          </div>
-      </section>
-
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 px-6 text-center text-sm">
+      <footer className="bg-slate-900 text-slate-400 py-12 px-6 text-center text-sm border-t border-slate-800">
           <p>© 2026 Devoys Software. Todos los derechos reservados.</p>
       </footer>
 

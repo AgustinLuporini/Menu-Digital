@@ -17,7 +17,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Club Cheka",
+  title: "Tu Resto",
   description: "Carta Digital",
 };
 

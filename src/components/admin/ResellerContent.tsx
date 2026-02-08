@@ -189,7 +189,11 @@ export default function ResellerContent() {
 
                         {/* Footer Card */}
                         <div className="mt-auto border-t border-slate-100 pt-4 flex justify-between items-center relative z-10">
-                            <a href={`/${rest.slug}`} target="_blank" className="text-xs font-bold text-slate-400 hover:text-orange-600 flex items-center gap-1 transition-colors">
+                            <a 
+                                href={`/menu/${rest.slug}`} 
+                                target="_blank" 
+                                className="text-xs font-bold text-slate-400 hover:text-orange-600 flex items-center gap-1 transition-colors"
+                            >
                                 Ver Menú Público <ExternalLink className="w-3 h-3" />
                             </a>
                         </div>

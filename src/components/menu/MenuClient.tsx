@@ -202,49 +202,59 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         )}
       </div>
 
-      {/* --- MODAL DE PRODUCTO --- */}
-      {selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in" onClick={() => setSelectedProduct(null)}>
-            <div 
-                className="bg-[#1A1A1A] w-full max-w-sm rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden relative flex flex-col"
-                onClick={(e) => e.stopPropagation()}
+    {/* --- MODAL DE PRODUCTO --- */}
+{selectedProduct && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in" onClick={() => setSelectedProduct(null)}>
+        <div 
+            className="bg-[#1A1A1A] w-full max-w-sm rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden relative flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+        >
+            {/* BOTÓN X CORREGIDO */}
+            <button 
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center bg-black/80 text-white rounded-full border border-white/20 backdrop-blur-md hover:bg-black hover:scale-105 transition-all shadow-lg"
             >
-                <button 
-                    onClick={() => setSelectedProduct(null)}
-                    className="absolute top-4 right-4 z-10 bg-black/50 text-white rounded-full p-2 backdrop-blur-md hover:bg-black/70 transition-all"
-                >
-                    <span className="material-symbols-outlined text-xl">close</span>
-                </button>
-                <div 
-                    className="w-full h-80 bg-cover bg-center relative"
-                    style={{ backgroundImage: `url('${selectedProduct.image_url}')` }}
-                >
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
-                </div>
-                <div className="p-8 -mt-6 relative bg-[#1A1A1A] rounded-t-[2rem]">
-                    <div className="flex justify-center -mt-14 mb-6">
-                         {/* Badge flotante de Categoría */}
-                        <span className="px-4 py-1.5 bg-accent text-white border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
-                            {categories.find(c => c.id === selectedProduct.category_id)?.name}
-                        </span>
-                    </div>
+                <span className="material-symbols-outlined text-lg leading-none">close</span>
+            </button>
+
+            <div 
+                className="w-full h-80 bg-cover bg-center relative"
+                style={{ backgroundImage: `url('${selectedProduct.image_url}')` }}
+            >
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-[#1A1A1A]/20 to-transparent"></div>
+            </div>
+
+            <div className="p-8 -mt-6 relative bg-[#1A1A1A] rounded-t-[2rem]">
+                <div className="flex justify-center -mt-14 mb-6">
+                    {/* BADGE DE CATEGORÍA CORREGIDO */}
+                    {/* Opción 1: Fondo Acento con texto oscuro (ideal si tu accent es claro) */}
+                    <span className="px-4 py-1.5 bg-accent text-slate-900 border border-black/10 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-lg">
+                        {categories.find(c => c.id === selectedProduct.category_id)?.name}
+                    </span>
                     
-                    <h3 className="text-3xl font-black text-white leading-tight mb-4 text-center">
-                        {selectedProduct.name}
-                    </h3>
-                    <p className="text-slate-300 text-base leading-relaxed mb-8 text-center text-opacity-90">
-                        {selectedProduct.description}
-                    </p>
-                    <div className="flex items-center justify-between pt-6 border-t border-white/10">
-                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Precio</span>
-                        <span className="text-4xl font-black text-accent tracking-tight">
-                            ${selectedProduct.price.toLocaleString("es-AR")}
-                        </span>
-                    </div>
+                    {/* Opción 2 (Descomentá esta si querés fondo oscuro y texto color acento): 
+                    <span className="px-4 py-1.5 bg-[#2A2A2A] text-accent border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
+                        {categories.find(c => c.id === selectedProduct.category_id)?.name}
+                    </span> 
+                    */}
+                </div>
+                
+                <h3 className="text-3xl font-black text-white leading-tight mb-4 text-center">
+                    {selectedProduct.name}
+                </h3>
+                <p className="text-slate-300 text-base leading-relaxed mb-8 text-center text-opacity-90">
+                    {selectedProduct.description}
+                </p>
+                <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Precio</span>
+                    <span className="text-4xl font-black text-accent tracking-tight">
+                        ${selectedProduct.price.toLocaleString("es-AR")}
+                    </span>
                 </div>
             </div>
         </div>
-      )}
+    </div>
+)}
 
       {/* --- MODAL WIFI --- */}
       {isWifiModalOpen && (

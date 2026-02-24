@@ -512,25 +512,66 @@ export default function AdminContent() {
                                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Nombre</label>
                                   <input type="text" value={currentProduct.name} onChange={e => setCurrentProduct({...currentProduct, name: e.target.value})} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl p-4 text-white focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 outline-none transition-all placeholder:text-slate-700" placeholder="Ej: Burger Doble Cheddar" required />
                               </div>
+                              
                               <div className="grid grid-cols-2 gap-4">
-                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Categoría</label>
-                                    <div className="relative">
-                                        <select value={currentProduct.category_id} onChange={e => setCurrentProduct({...currentProduct, category_id: e.target.value})} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl p-4 text-white appearance-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 outline-none transition-all">
-                                            {categories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
-                                            {categories.length === 0 && <option>¡Creá una categoría!</option>}
-                                        </select>
-                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none material-symbols-outlined">expand_more</span>
-                                    </div>
-                                 </div>
-                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Precio</label>
-                                    <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
-                                        <input type="number" value={currentProduct.price} onChange={e => setCurrentProduct({...currentProduct, price: Number(e.target.value)})} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl p-4 pl-8 text-white focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 outline-none transition-all font-bold" placeholder="0" required />
-                                    </div>
-                                 </div>
+                                  <div>
+                                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Categoría</label>
+                                      <div className="relative">
+                                          <select value={currentProduct.category_id} onChange={e => setCurrentProduct({...currentProduct, category_id: e.target.value})} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl p-4 text-white appearance-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 outline-none transition-all">
+                                              {categories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+                                              {categories.length === 0 && <option>¡Creá una categoría!</option>}
+                                          </select>
+                                          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none material-symbols-outlined">expand_more</span>
+                                      </div>
+                                  </div>
+                                  
+                                  <div className="flex flex-col gap-3">
+                                      <div>
+                                          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Precio Final</label>
+                                          <div className="relative">
+                                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
+                                              <input 
+                                                  type="number" 
+                                                  value={currentProduct.price} 
+                                                  onChange={e => {
+                                                      const newPrice = Number(e.target.value);
+                                                      // Calcula el precio sin IVA (21%) automáticamente y lo redondea
+                                                      const newPriceWithoutTax = newPrice > 0 ? Number((newPrice / 1.21).toFixed(2)) : 0;
+                                                      
+                                                      setCurrentProduct({
+                                                          ...currentProduct, 
+                                                          price: newPrice,
+                                                          price_without_tax: newPriceWithoutTax // Actualiza el nuevo campo
+                                                      });
+                                                  }} 
+                                                  className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl p-4 pl-8 text-white focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 outline-none transition-all font-bold" 
+                                                  placeholder="0" 
+                                                  required 
+                                              />
+                                          </div>
+                                      </div>
+
+                                      {/* NUEVO INPUT: Precio Sin Impuestos */}
+                                      <div>
+                                          <label className="block text-xs font-bold text-orange-500/80 uppercase tracking-wider mb-1.5 ml-1 flex items-center justify-between">
+                                              <span>Precio s/ imp.</span>
+                                              <span className="text-[10px] text-slate-500 font-normal normal-case">(Editable)</span>
+                                          </label>
+                                          <div className="relative">
+                                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">$</span>
+                                              <input 
+                                                  type="number" 
+                                                  step="0.01" 
+                                                  value={currentProduct.price_without_tax || ''} 
+                                                  onChange={e => setCurrentProduct({...currentProduct, price_without_tax: Number(e.target.value)})} 
+                                                  className="w-full bg-[#111] border border-orange-500/20 rounded-xl p-3 pl-8 text-orange-100/80 focus:border-orange-500/50 outline-none transition-all text-sm" 
+                                                  placeholder="Calculado auto." 
+                                              />
+                                          </div>
+                                      </div>
+                                  </div>
                               </div>
+                              
                               <div>
                                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Descripción</label>
                                   <textarea value={currentProduct.description || ""} onChange={e => setCurrentProduct({...currentProduct, description: e.target.value})} className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl p-4 text-white h-24 resize-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 outline-none transition-all placeholder:text-slate-700 text-sm" placeholder="Ingredientes, detalles, etc." />

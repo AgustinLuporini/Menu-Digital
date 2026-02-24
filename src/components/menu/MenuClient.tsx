@@ -160,47 +160,55 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
       </nav>
 
       {/* --- LISTA DE PRODUCTOS --- */}
-      <div className="divide-y divide-white/5 flex-1 w-full pt-4" ref={parent}>
-        {filteredProducts.map((product) => (
-          <div 
-            key={product.id} 
-            onClick={() => setSelectedProduct(product)}
-            className="px-6 py-6 hover:bg-white/5 transition-colors cursor-pointer group active:bg-white/10"
-          >
-            <div className="flex items-start gap-5">
-              {/* IMAGEN GRANDE */}
-              <div 
-                className="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl shrink-0 border border-white/10 group-hover:border-accent/50 transition-colors bg-slate-800 shadow-lg" 
-                style={{ backgroundImage: `url("${product.image_url}")` }} 
-              ></div>
-              
-              <div className="flex flex-1 flex-col justify-between min-w-0 h-24 py-1">
-                <div>
-                    <h3 className="text-white text-[17px] font-bold leading-tight mb-1.5 group-hover:text-accent transition-colors truncate pr-2">
-                    {product.name}
-                    </h3>
-                    <p className="text-slate-400 text-[13px] font-normal leading-snug line-clamp-2">
-                    {product.description}
-                    </p>
-                </div>
-                
-                <div className="text-right mt-auto">
-                    <p className="text-accent text-[16px] font-bold tracking-tight">
-                    ${product.price.toLocaleString("es-AR")}
-                    </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+<div className="divide-y divide-white/5 flex-1 w-full pt-4" ref={parent}>
+  {filteredProducts.map((product) => (
+    <div 
+      key={product.id} 
+      onClick={() => setSelectedProduct(product)}
+      className="px-6 py-6 hover:bg-white/5 transition-colors cursor-pointer group active:bg-white/10"
+    >
+      <div className="flex items-start gap-5">
+        {/* IMAGEN GRANDE */}
+        <div 
+          className="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl shrink-0 border border-white/10 group-hover:border-accent/50 transition-colors bg-slate-800 shadow-lg" 
+          style={{ backgroundImage: `url("${product.image_url}")` }} 
+        ></div>
         
-        {filteredProducts.length === 0 && (
-            <div className="py-20 text-center text-slate-500 text-sm flex flex-col items-center">
-                <span className="material-symbols-outlined text-4xl mb-2 opacity-50">restaurant_menu</span>
-                No hay productos en esta categoría.
-            </div>
-        )}
+        <div className="flex flex-1 flex-col justify-between min-w-0 h-24 py-1">
+          <div>
+              <h3 className="text-white text-[17px] font-bold leading-tight mb-1.5 group-hover:text-accent transition-colors truncate pr-2">
+              {product.name}
+              </h3>
+              <p className="text-slate-400 text-[13px] font-normal leading-snug line-clamp-2">
+              {product.description}
+              </p>
+          </div>
+          
+          <div className="flex flex-col items-end mt-auto">
+              {/* PRECIO FINAL */}
+              <p className="text-accent text-[16px] font-bold tracking-tight">
+                ${product.price.toLocaleString("es-AR")}
+              </p>
+              
+              {/* PRECIO SIN IMPUESTOS (NUEVO) */}
+              {product.price_without_tax ? (
+                <p className="text-orange-400/90 text-[11px] font-medium mt-0.5 tracking-wide">
+                  Sin impuestos: ${Number(product.price_without_tax).toLocaleString("es-AR")}
+                </p>
+              ) : null}
+          </div>
+        </div>
       </div>
+    </div>
+  ))}
+  
+  {filteredProducts.length === 0 && (
+      <div className="py-20 text-center text-slate-500 text-sm flex flex-col items-center">
+          <span className="material-symbols-outlined text-4xl mb-2 opacity-50">restaurant_menu</span>
+          No hay productos en esta categoría.
+      </div>
+  )}
+</div>
 
     {/* --- MODAL DE PRODUCTO --- */}
 {selectedProduct && (
